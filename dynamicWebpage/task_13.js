@@ -18,6 +18,11 @@
 //     console.log(" wife: i need butter for popcorn");
 //     return new Promise((resolve,reject)=>resolve(`${t} butter`))
 // });
+//    const getColdDrinks=getButter.then((t)=>{
+//          console.log("wife: lets get some cooldrinks");
+//          console.log("husbend: we should go in");
+//          return new Promise((resolve,reject)=>resolve('${t} colddrinks'))
+//    })
 // getButter.then((t)=>console.log(t));
 // console.log("person 4: shows the ticket");
 // console.log("person 5: shows the ticket");
