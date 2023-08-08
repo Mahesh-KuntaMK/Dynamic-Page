@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <form id="form"onsubmit="register(event)">
+            <label>Name:</label>
+            <input type="text" id="name">
+            <label>EmailId:</label>
+            <input type="text" id="email">
+            <label>Number</label>
+            <input type="phone" id="number">
+            <input type="submit" value="submit">
+        </form>
+        <ul id="listofitems"></ul>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+        <script>
+          
+            function register(event){
+                event.preventDefault();
+                const name=event.target.name.value;
+                const email=event.target.email.value;
+                const number=event.target.number.value;
+                let userData={
+                    name,
+                    email,
+                    number
+                }
+                axios.post('https://crudcrud.com/api/50d0b62d7e0b4b6488fdf229eddac332/userData',userData)
+                .then((res)=>{
+                  showUserDataONsaScreen(res.data)
+            })
+                .catch(err=>console.log(err))
+                document.getElementById('form').reset();
+
+            }
+
+
+            
+        window.addEventListener('DOMContentLoaded',()=>{
+                 axios.get('https://crudcrud.com/api/50d0b62d7e0b4b6488fdf229eddac332/userData')
+               .then(res=>{
+                for(let i=0;i<res.data.length;i++){
+                    showUserDataONsaScreen(res.data[i])
+                }         
+               })
+               
+               .catch(err=>console.log(err))
+            })
+
+
+        function showUserDataONsaScreen(user){
+           const ul=document.getElementById('listofitems');
+           var li=document.createElement('li');
+           li.textContent=`${user.name}--${user.email}--${user.number}`
+           ul.appendChild(li);
+         let delbtn=document.createElement('input');
+            delbtn.type='button';
+            delbtn.value='Delete'
+            delbtn.onclick=()=>{
+                   ul.removeChild(li)
+            }
+            li.appendChild(delbtn)
+            let editbtn=document.createElement('input');
+            editbtn.type='button';
+            editbtn.value='Edit'
+            editbtn.onclick=()=>{
+               let name=document.getElementById('name');
+                name.value=user.name;
+                let email=document.getElementById('email');
+                email.value=user.email;
+                let number=document.getElementById('number');
+                number.value=user.number;
+                ul.removeChild(li)
+            }
+            li.appendChild(editbtn);
+        
+        }
+    
+
+        </script>
+    </body>
+</html>
