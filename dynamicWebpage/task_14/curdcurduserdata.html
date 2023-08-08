@@ -24,7 +24,7 @@
                     email,
                     number
                 }
-                axios.post('https://crudcrud.com/api/00953e8238e04031a60aba477b168f71/userData',userData)
+                axios.post('https://crudcrud.com/api/e069fc956e10489d8f3701a68bd8a224/userData',userData)
                 .then((res)=>{
                   showUserDataONsaScreen(res.data)
             })
@@ -36,7 +36,7 @@
 
             
         window.addEventListener('DOMContentLoaded',()=>{
-            axios.get('https://crudcrud.com/api/00953e8238e04031a60aba477b168f71/userData')
+            axios.get('https://crudcrud.com/api/e069fc956e10489d8f3701a68bd8a224/userData')
                .then(res=>{
                 for(let i=0;i<res.data.length;i++){
                     showUserDataONsaScreen(res.data[i])
@@ -57,12 +57,12 @@
             delbtn.value='Delete'
           
                   
-             axios.get('https://crudcrud.com/api/00953e8238e04031a60aba477b168f71/userData')
+             axios.get('https://crudcrud.com/api/e069fc956e10489d8f3701a68bd8a224/userData')
                 .then(res=>{
                 for(let i=0;i<res.data.length;i++){
                     let id=res.data[i]._id;
                     delbtn.onclick=()=>{
-                        axios.delete(`https://crudcrud.com/api/00953e8238e04031a60aba477b168f71/userData/${id}`)
+                        axios.delete(`https://crudcrud.com/api/e069fc956e10489d8f3701a68bd8a224/userData/${id}`)
                         ul.removeChild(li)
                     }
                 }         
@@ -75,18 +75,38 @@
             let editbtn=document.createElement('input');
             editbtn.type='button';
             editbtn.value='Edit'
-            editbtn.onclick=()=>{
-               let name=document.getElementById('name');
-                name.value=user.name;
-                let email=document.getElementById('email');
-                email.value=user.email;
-                let number=document.getElementById('number');
-                number.value=user.number;
-                ul.removeChild(li)
+            li.appendChild(editbtn);       
+            axios.get('https://crudcrud.com/api/e069fc956e10489d8f3701a68bd8a224/userData')
+                .then(res=>{
+                for(let i=0;i<res.data.length;i++){
+                    let id=res.data[i]._id;
+                    editbtn.onclick=()=>{
+                       
+                        ul.removeChild(li)
+                        edit(res.data[i],id)
+                    }
+                }         
+               })
+               
+               .catch(err=>console.log(err))
+               
             }
-            li.appendChild(editbtn);
+            function edit(data,id){
+                axios.delete(`https://crudcrud.com/api/e069fc956e10489d8f3701a68bd8a224/userData/${id}`)
+                .then(res=>{
+                    let name=document.getElementById('name');
+                      name.value=data.name;
+                    let email=document.getElementById('email');
+                      email.value=data.email;
+                    let number=document.getElementById('number');
+                       number.value=data.number;
+                })
+                .catch(err=>console.log(err))
+            }
+          
+           
         
-        }
+        
     
 
         </script>
