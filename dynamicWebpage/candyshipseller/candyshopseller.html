@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>candy shop seller</title>
+ </head>
+ <body>
+    <form>
+        <label for="">CandyName:</label>
+        <input type="text" name="" required id="candyName">
+        <label >Description:</label>
+        <input type="text"  required id="description">
+        <label for="">Price:</label>
+        <input type="number" required name="" id="price">
+        <label for="">Quantity:</label>
+        <input type="number" required name="" id="quantity">
+        <button id="submit" onclick="candydetailes(event)">Add Item</button>
+    </form>
+    <ul id="listofitems"></ul>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+    
+    <script>
+            let ul=document.getElementById('listofitems')
+            function candydetailes(event){
+        event.preventDefault();
+        let candyinfo={
+                candyname:document.getElementById('candyName').value,
+                price:document.getElementById('price').value,
+                quantity:document.getElementById('quantity').value,
+                description:document.getElementById("description").value
+            }
+            axios.post("https://crudcrud.com/api/e65b22bcb81e4a99a4b9b83865b76334/candyinfo",candyinfo)
+            .then(res=>{
+                showOnDisplay(res.data)
+            })
+            .catch(err=>console.log(err))
+        }
+            window.addEventListener('DOMContentLoaded',function(){
+               axios.get("https://crudcrud.com/api/e65b22bcb81e4a99a4b9b83865b76334/candyinfo")
+                    .then((response)=>{
+                            for(let i=0;i<response.data.length;i++){
+                             showOnDisplay(response.data[i]);
+                               }
+                           }).catch((error)=>{
+                           console.log(error);
+                        })
+                          })
+                        
+            function showOnDisplay(candy){
+                if(candy.quantity=="null"){
+                    alert("item is not available");
+                }
+                else{
+            let li=document.createElement('li')
+            li.setAttribute("id",candy._id);
+            li.textContent= ` Candy Name: ${candy.candyname} --- Description: ${candy.description} --- Price: ${candy.price} --- Quantity: ${candy.quantity} --- `;
+            let buy1=document.createElement('button');
+            buy1.textContent="Buy1";
+            li.appendChild(buy1)
+            buy1.addEventListener("click",()=>updateFromCrud(candy._id,candy.quantity,candy,1));
+            let buy2=document.createElement('button');
+            buy2.textContent="Buy2";
+            li.appendChild(buy2)
+            buy2.addEventListener("click",()=>updateFromCrud(candy._id,candy.quantity,candy,2));
+            ul.appendChild(li);
+            let buy3=document.createElement('button');
+            buy3.textContent="Buy3";
+            li.appendChild(buy3)
+            buy3.addEventListener("click",()=>updateFromCrud(candy._id,candy.quantity,candy,3));
+
+            ul.appendChild(li);
+        }
+    }
+        function updateFromCrud(id,quant,user,numberofitmes){
+            let updatedquantity
+            if(parseInt(quant)<=0){
+                updatedquantity="This Item is not available"
+            }
+            else {
+             updatedquantity=quant-numberofitmes;
+             if(updatedquantity<=0){
+                updatedquantity="This Item is not available"
+             }
+            }
+            console.log(id)
+            console.log(quant)
+            let delold=document.getElementById(`${id}`)
+            ul.removeChild(delold)
+           axios.delete(`https://crudcrud.com/api/e65b22bcb81e4a99a4b9b83865b76334/candyinfo/${id}`)
+           axios.post("https://crudcrud.com/api/e65b22bcb81e4a99a4b9b83865b76334/candyinfo",{
+              candyname:user.candyname,
+              description:user.description,
+              price:user.price,
+              quantity:updatedquantity
+           })
+           .then(res=>{
+               showOnDisplay(res.data)
+           })
+           .catch(err=>console.log(err))
+        }
+    
+    </script>
+ </body>
+ </html>
